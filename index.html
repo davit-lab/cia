@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better Programmer - Premium Programming E-Books Library</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/theme/vs-dark.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/addon/hint/show-hint.min.css" rel="stylesheet">
+    <style>
+        /* ===== CSS Variables & Reset ===== */
+        :root {
+            --primary-bg: #0a0a0f;
+            --secondary-bg: #0f1117;
+            --accent-blue: #007acc;
+            --accent-purple: #c586c0;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #1e293b;
+            --border-light: #334155;
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #007acc, #c586c0);
+            --gradient-secondary: linear-gradient(135deg, #10b981, #007acc);
+            --gradient-dark: linear-gradient(135deg, #0f172a, #1e293b);
+            --vscode-bg: #1e1e1e;
+            --vscode-sidebar: #252526;
+            --vscode-tab: #2d2d30;
+            --vscode-text: #d4d4d4;
+            --vscode-blue: #007acc;
+            --vscode-purple: #c586c0;
+            --vscode-green: #4ec9b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== Utility Classes ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* ===== Background Effects ===== */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent-blue);
+            top: -300px;
+            right: -200px;
+        }
+
+        .circle-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-purple);
+            bottom: -200px;
+            left: -200px;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+
+        /* ===== Cookies Consent ===== */
+        .cookie-consent {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            z-index: 9999;
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            animation: slideUp 0.3s ease;
+            display: none;
+        }
+
+        .cookie-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cookie-content .material-symbols-rounded {
+            font-size: 2rem;
+            color: var(--accent-blue);
+        }
+
+        .cookie-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cookie-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== IMPROVED Header & Navigation ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-link .material-symbols-rounded {
+            font-size: 1.2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 280px;
+        }
+
+        .search-box:focus-within {
+            transform: scale(1.02);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .cart-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cart-btn:hover {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent-orange);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .chat-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .chat-btn:hover {
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .auth-btn {
+            padding: 10px 24px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 122, 204, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 122, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Books Section ===== */
+        .books-section {
+            background: var(--gradient-dark);
+            position: relative;
+        }
+
+        .books-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .filters-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-select {
+            padding: 10px 12px;
+            background: #000000;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .filter-select option {
+            background: #000000;
+            color: var(--text-primary);
+            padding: 10px;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* ===== Book Card Design ===== */
+        .book-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .book-cover {
+            position: relative;
+            height: 240px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.8));
+            overflow: hidden;
+        }
+
+        .book-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+
+        .book-badges {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-free {
+            background: linear-gradient(135deg, var(--accent-green), #34d399);
+            color: black;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+            color: white;
+        }
+
+        .badge-popular {
+            background: linear-gradient(135deg, var(--accent-purple), #a78bfa);
+            color: white;
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-light);
+            margin-bottom: 1rem;
+        }
+
+        .book-category {
+            padding: 4px 12px;
+            background: rgba(0, 122, 204, 0.1);
+            border: 1px solid rgba(0, 122, 204, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-orange);
+        }
+
+        .book-price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .book-price {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .book-price-free {
+            color: var(--accent-green);
+        }
+
+        .book-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .btn-small {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-fullwidth {
+            grid-column: 1 / -1;
+        }
+
+        .btn-cart {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-cart:hover {
+            background: rgba(0, 122, 204, 0.1);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* ===== Main Content Container ===== */
+        #mainContent {
+            min-height: 60vh;
+            padding-top: 140px;
+        }
+
+        /* ===== Pages Styling ===== */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Categories Page */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        /* FAQ Page */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* Profile Page */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 5px rgba(0, 122, 204, 0.2);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: var(--accent-blue);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-avatar:hover .avatar-upload-btn {
+            opacity: 1;
+        }
+
+        .profile-info {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        /* ===== Enhanced Admin Panel ===== */
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            min-height: 70vh;
+        }
+
+        .admin-sidebar {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 122, 204, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .admin-sidebar h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .admin-menu {
+            list-style: none;
+        }
+
+        .admin-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            margin: 4px 0;
+        }
+
+        .admin-menu a:hover,
+        .admin-menu a.active {
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.2), rgba(197, 134, 192, 0.1));
+            border-left: 4px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .admin-content {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 122, 204, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+        }
+
+        .stat-card-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ===== Chat System ===== */
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            display: none;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: rgba(0, 122, 204, 0.1);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.75rem;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .message.admin {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            resize: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-input button {
+            padding: 10px 20px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ===== Code Editor Page ===== */
+        .code-editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 70vh;
+        }
+
+        .code-editor-section,
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-editor-section h3,
+        .preview-section h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            background: var(--vscode-sidebar);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .editor-container {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--vscode-bg);
+            border: 1px solid var(--border-light);
+        }
+
+        .CodeMirror {
+            height: 100% !important;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .preview-container {
+            flex: 1;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ===== Enhanced Payment Modal ===== */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .payment-method {
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--accent-blue);
+            background: rgba(0, 122, 204, 0.05);
+        }
+
+        .payment-method.active {
+            border-color: var(--accent-blue);
+            background: rgba(0, 122, 204, 0.1);
+        }
+
+        .card-details {
+            display: none;
+            margin-top: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .card-details.active {
+            display: block;
+        }
+
+        /* ===== Modal System ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* ===== Forms ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .centered-form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-switch a {
+            color: var(--accent-blue);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: var(--secondary-bg);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== Toast Notifications ===== */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+            .code-editor-container {
+                grid-template-columns: 1fr;
+                height: 120vh;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 15, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                box-shadow: var(--shadow-xl);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-link {
+                padding: 15px 20px;
+                justify-content: flex-start;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .search-box {
+                order: 3;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .book-actions {
+                grid-template-columns: 1fr;
+            }
+            .book-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .search-box {
+                width: calc(100% - 100px);
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal {
+                width: 95%;
+                margin: 1rem;
+            }
+            .code-editor-container {
+                height: auto;
+                min-height: 500px;
+            }
+            .editor-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .editor-toolbar select,
+            .editor-toolbar button {
+                width: 100%;
+            }
+            .chat-container {
+                width: 90%;
+                right: 5%;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .book-card {
+                min-width: 0;
+            }
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            .profile-avatar .avatar-placeholder {
+                font-size: 2rem;
+            }
+            .avatar-upload-btn {
+                width: 30px;
+                height: 30px;
+                bottom: 5px;
+                right: 5px;
+            }
+            .admin-panel {
+                gap: 1rem;
+            }
+            .admin-sidebar {
+                padding: 1rem;
+            }
+            .admin-content {
+                padding: 1rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .cookie-consent {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="gradient-circle circle-1"></div>
+        <div class="gradient-circle circle-2"></div>
+        <div class="grid-pattern"></div>
+    </div>
+
+    <!-- Cookies Consent -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-content">
+            <span class="material-symbols-rounded">cookie</span>
+            <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
+            <div class="cookie-actions">
+                <button class="btn btn-primary" id="acceptCookies">Accept</button>
+                <button class="btn btn-secondary" id="rejectCookies">Reject</button>
+                <a href="#" class="cookie-link" onclick="app.showCookieInfo()">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <span class="material-symbols-rounded">code</span>
+                    </div>
+                    <span class="logo-text">BetterProgrammer</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span class="material-symbols-rounded">menu</span>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" class="nav-link active" data-page="home">
+                        <span class="material-symbols-rounded">home</span>
+                        Home
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="books">
+                        <span class="material-symbols-rounded">menu_book</span>
+                        Books
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="categories">
+                        <span class="material-symbols-rounded">category</span>
+                        Categories
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="faq">
+                        <span class="material-symbols-rounded">help</span>
+                        FAQ
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="profile">
+                        <span class="material-symbols-rounded">person</span>
+                        Profile
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="codeEditor">
+                        <span class="material-symbols-rounded">code_blocks</span>
+                        Code Editor
+                    </a></li>
+                    <li><a href="#" class="nav-link" data-page="adminPanel" id="adminNavLink" style="display: none;">
+                        <span class="material-symbols-rounded">admin_panel_settings</span>
+                        Admin
+                    </a></li>
+                </ul>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="Search books..." id="searchInput">
+                        <span class="material-symbols-rounded search-icon">search</span>
+                    </div>
+                    <button class="chat-btn" id="chatBtn">
+                        <span class="material-symbols-rounded">chat</span>
+                        <span class="chat-badge" id="chatBadge">0</span>
+                    </button>
+                    <button class="cart-btn" id="cartBtn">
+                        <span class="material-symbols-rounded">shopping_cart</span>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                    <button class="auth-btn" id="authBtn">Sign In</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="mainContent">
+        <!-- Home Page -->
+        <section class="page active" id="homePage">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">ისწავლე პროგრამირება პრემიუმ კლასის წიგნებით</h1>
+                        <p class="hero-subtitle">
+                            მიიღეთ წვდომა მაღალი ხარისხის ელექტრონულ წიგნებზე და განვითარდი
+                           დაწყებითი ნულოვანი დონიდან პროფესიონალამდე 
+                        </p>
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalBooks">14+</div>
+                                <div class="stat-label">ელექტრონული წიგნები</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalAuthors">2+</div>
+                                <div class="stat-label">წლიანი გამოცდილება</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="activeReaders">700+</div>
+                                <div class="stat-label">აქტიური მკითხველი</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="avgRating">5.0</div>
+                                <div class="stat-label">შეფასება</div>
+                            </div>
+                        </div>
+                        <div class="cta-buttons">
+                            <button class="btn btn-primary" id="exploreBtn">
+                                <span class="material-symbols-rounded">explore</span>
+                                დაათვალიერეთ ბიბლილოთეკა
+                            </button>
+                            <button class="btn btn-secondary" id="joinFreeBtn">
+                                <span class="material-symbols-rounded">person_add</span>
+                                დარეგისტრირდი უფასოდ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Books Page -->
+        <section class="page books-section" id="booksPage">
+            <div class="container">
+                <div class="books-header">
+                    <h2 class="section-title">Programming E-Books Collection</h2>
+                    <p class="section-subtitle">Browse our curated collection of programming books. Filter by category, difficulty, or price range.</p>
+                </div>
+                <!-- Filters -->
+                <div class="filters-container">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <span class="material-symbols-rounded">category</span>
+                                Category
+                            </label>
+                            <select class="filter-select" id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="web">Web Development</option>
+                                <option value="mobile">Mobile Development</option>
+                                <option value="data">Data Science</option>
+                                <option value="ai">AI & Machine Learning</option>
+                                <option value="devops">DevOps</option>
+                                <option value="algorithms">Algorithms</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <span class="material-symbols-rounded">attach_money</span>
+                                Price Range
+                            </label>
+                            <select class="filter-select" id="priceFilter">
+                                <option value="all">All Prices</option>
+                                <option value="free">Free Only</option>
+                                <option value="paid">Paid Only</option>
+                                <option value="under-20">Under $20</option>
+                                <option value="20-50">$20 - $50</option>
+                                <option value="over-50">Over $50</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <span class="material-symbols-rounded">sort</span>
+                                Sort By
+                            </label>
+                            <select class="filter-select" id="sortFilter">
+                                <option value="popular">Most Popular</option>
+                                <option value="newest">Newest First</option>
+                                <option value="rating">Highest Rated</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <span class="material-symbols-rounded">school</span>
+                                Difficulty
+                            </label>
+                            <select class="filter-select" id="difficultyFilter">
+                                <option value="all">All Levels</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary" id="resetFilters">
+                            <span class="material-symbols-rounded">restart_alt</span>
+                            Reset Filters
+                        </button>
+                    </div>
+                </div>
+                <!-- Books Grid -->
+                <div class="books-grid" id="booksGrid">
+                    <!-- Books will be loaded dynamically -->
+                </div>
+                <!-- Load More Button -->
+                <div style="text-align: center; margin-top: 3rem;">
+                    <button class="btn btn-secondary" id="loadMoreBtn">
+                        <span class="material-symbols-rounded">expand_more</span>
+                        Load More Books
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Page -->
+        <section class="page" id="categoriesPage">
+            <div class="container section">
+                <h2 class="section-title">Book Categories</h2>
+                <p class="section-subtitle">Explore programming books by category to find exactly what you're looking for.</p>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Page -->
+        <section class="page" id="faqPage">
+            <div class="container section">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Find answers to common questions about our e-book library and services.</p>
+                <div class="faq-container" id="faqContainer">
+                    <!-- FAQ items will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section class="page" id="profilePage">
+            <div class="container section">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <div class="avatar-placeholder">
+                            <span class="material-symbols-rounded">person</span>
+                        </div>
+                        <div class="avatar-upload-btn" id="avatarUploadBtn">
+                            <span class="material-symbols-rounded">photo_camera</span>
+                        </div>
+                    </div>
+                    <h2 class="section-title">My Profile</h2>
+                    <p class="section-subtitle">View and manage your account information</p>
+                </div>
+                <div class="profile-info" id="profileInfo">
+                    <!-- Profile info will be loaded dynamically -->
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-secondary" id="editProfileBtn">
+                        <span class="material-symbols-rounded">edit</span>
+                        Edit Profile
+                    </button>
+                    <button class="btn btn-primary" id="myBooksBtn">
+                        <span class="material-symbols-rounded">library_books</span>
+                        My Purchased Books
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Editor Page -->
+        <section class="page" id="codeEditorPage">
+            <div class="container section">
+                <h2 class="section-title">VS Code Style Editor</h2>
+                <p class="section-subtitle">Write, test, and preview your code in real-time with VS Code-like experience.</p>
+                <div class="code-editor-container">
+                    <div class="code-editor-section">
+                        <h3>Code Editor</h3>
+                        <div class="editor-toolbar">
+                            <select class="form-input" id="languageSelect" style="width: 150px;">
+                                <option value="javascript">JavaScript</option>
+                                <option value="html">HTML</option>
+                                <option value="css">CSS</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="php">PHP</option>
+                                <option value="cpp">C++</option>
+                            </select>
+                            <button class="btn btn-secondary btn-small" id="clearCodeBtn">
+                                <span class="material-symbols-rounded">delete</span>
+                                Clear
+                            </button>
+                            <button class="btn btn-primary btn-small" id="runCodeBtn">
+                                <span class="material-symbols-rounded">play_arrow</span>
+                                Run Code
+                            </button>
+                            <button class="btn btn-secondary btn-small" id="saveCodeBtn">
+                                <span class="material-symbols-rounded">save</span>
+                                Save
+                            </button>
+                            <button class="btn btn-secondary btn-small" id="formatCodeBtn">
+                                <span class="material-symbols-rounded">format_ink_highlighter</span>
+                                Format
+                            </button>
+                        </div>
+                        <div class="editor-container">
+                            <textarea id="codeEditor" style="display: none;"></textarea>
+                        </div>
+                    </div>
+                    <div class="preview-section">
+                        <h3>Live Preview</h3>
+                        <div class="preview-container">
+                            <iframe id="previewFrame" class="preview-content"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Saved Code Snippets</h3>
+                    <div id="savedSnippets" style="background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.5rem; min-height: 100px;">
+                        <!-- Saved snippets will appear here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel -->
+        <section class="page" id="adminPanelPage">
+            <div class="container section">
+                <h2 class="section-title">Admin Dashboard</h2>
+                <p class="section-subtitle">Manage all aspects of the website with full control and privileges.</p>
+                <div class="admin-panel">
+                    <div class="admin-sidebar">
+                        <h3>Admin Menu</h3>
+                        <ul class="admin-menu">
+                            <li><a href="#" data-admin-section="dashboard" class="active">
+                                <span class="material-symbols-rounded">dashboard</span>
+                                Dashboard
+                            </a></li>
+                            <li><a href="#" data-admin-section="books">
+                                <span class="material-symbols-rounded">menu_book</span>
+                                Books Management
+                            </a></li>
+                            <li><a href="#" data-admin-section="users">
+                                <span class="material-symbols-rounded">people</span>
+                                Users Management
+                            </a></li>
+                            <li><a href="#" data-admin-section="categories">
+                                <span class="material-symbols-rounded">category</span>
+                                Categories
+                            </a></li>
+                            <li><a href="#" data-admin-section="orders">
+                                <span class="material-symbols-rounded">shopping_cart</span>
+                                Orders
+                            </a></li>
+                            <li><a href="#" data-admin-section="settings">
+                                <span class="material-symbols-rounded">settings</span>
+                                Settings
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="admin-content">
+                        <!-- Dashboard Section -->
+                        <div class="admin-section active" id="adminDashboard">
+                            <h3 style="margin-bottom: 1.5rem;">System Overview</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-card-number" id="totalBooksCount">0</div>
+                                    <div class="stat-card-label">Total Books</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-number" id="totalUsersCount">0</div>
+                                    <div class="stat-card-label">Total Users</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-number" id="totalOrdersCount">0</div>
+                                    <div class="stat-card-label">Total Orders</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-number" id="totalRevenue">$0</div>
+                                    <div class="stat-card-label">Total Revenue</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 2rem;">
+                                <h3 style="margin-bottom: 1rem;">Recent Activity</h3>
+                                <div id="recentActivity" style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; min-height: 200px;">
+                                    <!-- Recent activity will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Books Management Section -->
+                        <div class="admin-section" id="adminBooks">
+                            <h3 style="margin-bottom: 1.5rem;">Books Management</h3>
+                            <div class="admin-actions">
+                                <button class="btn btn-primary" id="adminAddBookBtn">
+                                    <span class="material-symbols-rounded">add</span>
+                                    Add New Book
+                                </button>
+                                <button class="btn btn-secondary" id="adminImportBooksBtn">
+                                    <span class="material-symbols-rounded">upload</span>
+                                    Import Books
+                                </button>
+                                <button class="btn btn-secondary" id="adminExportBooksBtn">
+                                    <span class="material-symbols-rounded">download</span>
+                                    Export Books
+                                </button>
+                            </div>
+                            <div class="books-list" style="margin-top: 2rem;">
+                                <div id="adminBooksList">
+                                    <!-- Books will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Users Management Section -->
+                        <div class="admin-section" id="adminUsers">
+                            <h3 style="margin-bottom: 1.5rem;">Users Management</h3>
+                            <div style="margin-bottom: 1.5rem;">
+                                <input type="text" class="form-input" id="searchUsers" placeholder="Search users...">
+                            </div>
+                            <div id="usersList">
+                                <!-- Users will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Categories Section -->
+                        <div class="admin-section" id="adminCategories">
+                            <h3 style="margin-bottom: 1.5rem;">Categories Management</h3>
+                            <div id="categoriesManagement">
+                                <!-- Categories management will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Orders Section -->
+                        <div class="admin-section" id="adminOrders">
+                            <h3 style="margin-bottom: 1.5rem;">Orders Management</h3>
+                            <div id="ordersList">
+                                <!-- Orders will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Settings Section -->
+                        <div class="admin-section" id="adminSettings">
+                            <h3 style="margin-bottom: 1.5rem;">System Settings</h3>
+                            <form id="adminSettingsForm">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <span class="material-symbols-rounded">store</span>
+                                        Site Name
+                                    </label>
+                                    <input type="text" class="form-input" id="siteName" value="Better Programmer">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <span class="material-symbols-rounded">description</span>
+                                        Site Description
+                                    </label>
+                                    <textarea class="form-input" id="siteDescription" rows="3">Premium Programming E-Books Library</textarea>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <span class="material-symbols-rounded">attach_money</span>
+                                            Default Currency
+                                        </label>
+                                        <select class="form-input" id="defaultCurrency">
+                                            <option value="USD">USD ($)</option>
+                                            <option value="EUR">EUR (€)</option>
+                                            <option value="GBP">GBP (£)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <span class="material-symbols-rounded">language</span>
+                                            Default Language
+                                        </label>
+                                        <select class="form-input" id="defaultLanguage">
+                                            <option value="en">English</option>
+                                            <option value="ge">Georgian</option>
+                                            <option value="ru">Russian</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="material-symbols-rounded">save</span>
+                                        Save Settings
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="resetSettingsBtn">
+                                        <span class="material-symbols-rounded">restart_alt</span>
+                                        Reset to Default
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Book Detail Page -->
+        <section class="page" id="bookDetailPage">
+            <div class="container section">
+                <div id="bookDetailContent">
+                    <!-- Dynamic book detail content -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h3><span class="material-symbols-rounded">forum</span> Support Chat</h3>
+            <button class="chat-close" id="chatClose">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input">
+            <textarea id="chatInput" placeholder="Type your message..." rows="2"></textarea>
+            <button id="sendMessage">
+                <span class="material-symbols-rounded">send</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Better Programmer</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Your premier destination for programming education.
+                        Master the code, master the future.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="app.navigateTo('home')"><span class="material-symbols-rounded">home</span> Home</a></li>
+                        <li><a href="#" onclick="app.navigateTo('books')"><span class="material-symbols-rounded">menu_book</span> E-Books</a></li>
+                        <li><a href="#" onclick="app.navigateTo('categories')"><span class="material-symbols-rounded">category</span> Categories</a></li>
+                        <li><a href="#" onclick="app.navigateTo('faq')"><span class="material-symbols-rounded">help</span> FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="app.navigateTo('books'); app.setFilter('category', 'web')"><span class="material-symbols-rounded">code</span> Web Development</a></li>
+                        <li><a href="#" onclick="app.navigateTo('books'); app.setFilter('category', 'mobile')"><span class="material-symbols-rounded">smartphone</span> Mobile Development</a></li>
+                        <li><a href="#" onclick="app.navigateTo('books'); app.setFilter('category', 'data')"><span class="material-symbols-rounded">analytics</span> Data Science</a></li>
+                        <li><a href="#" onclick="app.navigateTo('books'); app.setFilter('category', 'ai')"><span class="material-symbols-rounded">psychology</span> AI & ML</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="app.navigateTo('faq')"><span class="material-symbols-rounded">contact_support</span> Help Center</a></li>
+                        <li><a href="#"><span class="material-symbols-rounded">email</span> Contact Us</a></li>
+                        <li><a href="#"><span class="material-symbols-rounded">policy</span> Privacy Policy</a></li>
+                        <li><a href="#"><span class="material-symbols-rounded">description</span> Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Better Programmer. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                    Made with <span style="color: var(--accent-blue);">❤️</span> for developers worldwide
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
